@@ -5,8 +5,3 @@ Projeto desenvolvido como obtenção parcial de nota na disciplina de Projeto de
 Eduardo Leal de Carvalho
 
 Nicolas Flores Feijo
-
-### Sistemas operacionais usados
-```
-Linux Ubuntu 23.04
-Linux Ubuntu 22.04
