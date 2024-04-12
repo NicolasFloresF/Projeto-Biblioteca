@@ -1,0 +1,22 @@
+{
+	"usuarios": [
+		{
+			"nome": "Eduardo Carvalho",
+			"senha": "123456",
+			"admin": "sim",
+			"livros_emprestimos": []
+		},
+		{
+			"nome": "Nicolas Flores",
+			"senha": "123456",
+			"admin": "sim",
+			"livros_emprestimos": []
+		},
+		{
+			"nome": "Jon Doe",
+			"senha": "123456",
+			"admin": "nao",
+			"livros_emprestimos": ["Calabresa", "Mussarela"]
+		}
+	]
+}
