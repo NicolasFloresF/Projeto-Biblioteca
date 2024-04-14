@@ -1,22 +1,64 @@
 {
-	"usuarios": [
-		{
-			"nome": "Eduardo Carvalho",
-			"senha": "123456",
-			"admin": "sim",
-			"livros_emprestimos": []
-		},
-		{
-			"nome": "Nicolas Flores",
-			"senha": "123456",
-			"admin": "sim",
-			"livros_emprestimos": []
-		},
-		{
-			"nome": "Jon Doe",
-			"senha": "123456",
-			"admin": "nao",
-			"livros_emprestimos": ["Calabresa", "Mussarela"]
-		}
-	]
+    "usuarios": [
+        {
+            "nome": "Eduardo Carvalho",
+            "senha": "123456",
+            "admin": "sim",
+            "livros_emprestimos": []
+        },
+        {
+            "nome": "Nicolas Flores",
+            "senha": "123456",
+            "admin": "sim",
+            "livros_emprestimos": []
+        },
+        {
+            "nome": "Jon Doe",
+            "senha": "123456",
+            "admin": "nao",
+            "livros_emprestimos": []
+        },
+        {
+            "nome": "Jon Jean",
+            "senha": "456",
+            "admin": "nao",
+            "livros_emprestimos": []
+        },
+        {
+            "nome": "Jon Jon",
+            "senha": "cacadordemartedetona",
+            "admin": "nao",
+            "livros_emprestimos": []
+        },
+        {
+            "nome": "Clark kent",
+            "senha": "LouisLane123",
+            "admin": "nao",
+            "livros_emprestimos": []
+        },
+        {
+            "nome": "Gaviao Arqueiro",
+            "senha": "Arrow",
+            "admin": "nao",
+            "livros_emprestimos": []
+        },
+        {
+            "nome": "Bruce Wayne",
+            "senha": "i am batman",
+            "admin": "nao",
+            "livros_emprestimos": []
+        },
+        {
+            "nome": "Barry Allen",
+            "senha": "superman muito lento",
+            "admin": "nao",
+            "livros_emprestimos": []
+        },
+        {
+            "nome": "Diana",
+            "senha": "MulherMaravilha",
+            "admin": "nao",
+            "livros_emprestimos": []
+        }
+    ]
 }

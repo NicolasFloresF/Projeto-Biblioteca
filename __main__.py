@@ -54,6 +54,15 @@ def main():
 					return usuario, dados["usuarios"][i]["admin"]
 			print("Nome ou senha incorreto, por favor tente novamente")
 			return "0", "0"
+	
+	#Persiste os dados nos arquivos json
+	def guardarDados(nomeArquivo, dadosUsuario):
+		#persistir também os dados dos livros
+		with open(nomeArquivo,'w') as arquivo:
+			json.dump(dadosUsuario, arquivo, indent=4)
+		limpar()
+		print("Usuarios Atualizados")
+
 
 
 #-----------CRUDS USUARIO-----------
@@ -124,8 +133,26 @@ def main():
 
 
 	#Exclui o usuário a partir do seu nome
-	def excluirUsuario():
-		print("ok")
+	def excluirUsuario(dados):
+		usuario = input("Digite o usuario a ser excluido.: ")
+		flag = 0
+		for i in range(len(dados['usuarios'])):
+			if usuario == dados["usuarios"][i]["nome"]:
+				flag = 1
+				print(f"Deseja mesmo excluir {usuario}?")
+				print("Sim\nNao")
+				confirmacao = input(".: ")
+				if confirmacao == "Sim":
+					del dados["usuarios"][i]
+					limpar()
+					print("Usuario excluido com sucesso")
+				elif confirmacao == "Nao":
+					limpar()
+					print("Operação abortada")
+		if flag == 0:
+			limpar()
+			print("Usuario não encontrado")
+		return dados
 
 	#-----------CRUDS LIVROS-----------
 	def cadastrarLivro():
@@ -143,7 +170,7 @@ def main():
 # -----------BIBLIOTECA-----------
 
 	#Função principal contendo todos os CRUDS de livros e usuario
-	def biblioteca(usuario, dadosUsuario, admin):
+	def biblioteca(dadosUsuario, admin):
 		while True:
 			print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
 			if admin == "nao":
@@ -153,6 +180,7 @@ def main():
 				elif comando == "2":
 					devolverLivro()
 				elif comando == "3":
+					guardarDados("usuario.json", dadosUsuario)
 					break
 			if admin == "sim":
 				print("---BEM VINDO ADMIN---")
@@ -174,8 +202,9 @@ def main():
 				elif comando == "7":
 					dadosUsuario = editarUsuarios(dadosUsuario)
 				elif comando == "8":
-					excluirUsuario()
+					dadosUsuario = excluirUsuario(dadosUsuario)
 				elif comando == "9":
+					guardarDados("usuario.json", dadosUsuario)
 					break
 
 	def home(dados, quantUsuarios):
@@ -191,7 +220,7 @@ def main():
 					usuario, admin = login(dados, quantUsuarios)
 				limpar()
 				#Envia as informações para a parte principal
-				biblioteca(usuario, dados, admin)
+				biblioteca(dados, admin)
 			if comando == "2":
 				limpar()
 				#Armazena o novo usuario na variavel dados
@@ -199,7 +228,7 @@ def main():
 				admin = "nao"
 				limpar()
 				#Envia as informações para a parte principal
-				biblioteca(usuario, dados, admin)
+				biblioteca(dados, admin)
 
 			if comando == "3":
 				print("Obrigado por utilizar nosso sistema.\nAtt: \n-EdCarvalho\n-NiFlores")
