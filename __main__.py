@@ -5,7 +5,7 @@ o gerenciamento de uma biblioteca
 ● Gerenciamento de livros (CRUD).
 ● Registro de empréstimos e devoluções.
 """
-#teste commit
+
 #Estaremos trabalhando com JSON ao longo do trabalho 1
 import json
 
@@ -53,7 +53,7 @@ def main():
 					print(f"SEJA BEM VINDO {usuario}")
 					return usuario, dados["usuarios"][i]["admin"]
 			print("Nome ou senha incorreto, por favor tente novamente")
-			return "0"
+			return "0", "0"
 
 
 #-----------CRUDS USUARIO-----------
@@ -71,14 +71,75 @@ def main():
 			'livros_emprestimos': []
 		}
 		dados["usuarios"].append(dicionario)
+		limpar()
+		print("Cadastro realizado com sucesso")
 
 		return dados
-	def listarUsuarios(dados):
-		for i in range(dados['usuarios']):
-			nome = dados["usuarios"][i]["nome"]
-			livros = dados["usuarios"][i]["livros_emprestimos"]
-			print(f"{nome} - {livros}")
+	
+	#Retorna a lista de todos os usuários cadastrados e seus livros emprestados
+	def consultarUsuarios(dados):
+		print("    NOME   -   Livros solicitados")
+		while True:
+			for i in range(len(dados['usuarios'])):
+				nome = dados["usuarios"][i]["nome"]
+				livros = dados["usuarios"][i]["livros_emprestimos"]
+				print(f"{nome} - {livros}")
+			comando = input("Tecle Enter para sair .: ")
+			if comando == "":
+				limpar()
+				break
 
+	#Seleciona o usuário através do nome e permite a edição dos seus dados
+	def editarUsuarios(dados):
+		usuario = input("Digite o usuario a ser alterado.: ")
+		flag = 0
+		for i in range(len(dados['usuarios'])):
+			if usuario == dados["usuarios"][i]["nome"]:
+				flag = 1
+				print("Nome\nSenha\nAdmin")
+				campoAlterado = input("Digite o campo que deseja alterar.: ")
+				if campoAlterado == "Nome":
+					nome = input("Digite o novo nome.: ")
+					dados["usuarios"][i]["nome"] = nome
+					limpar()
+					print("Nome alterado com sucesso")
+				elif campoAlterado == "Senha":
+					senha = input("Digite a nova senha.: ")
+					dados["usuarios"][i]["senha"] = senha
+					limpar()
+					print("Senha alterada com sucesso")
+				elif campoAlterado == "Admin":
+					admin = input("Digite sim ou nao para o campo admin.: ")
+					dados["usuarios"][i]["admin"] = admin
+					if admin == "sim":
+						limpar()
+						print(f"{usuario} agora é admin")
+					elif admin == "nao":
+						limpar()
+						print(f"Acesso admin retirado de {usuario}")
+		if flag == 0:
+			limpar()
+			print("Usuario nao encontrado")
+		return dados
+
+
+	#Exclui o usuário a partir do seu nome
+	def excluirUsuario():
+		print("ok")
+
+	#-----------CRUDS LIVROS-----------
+	def cadastrarLivro():
+		print("ok")
+	def consultarLivro():
+		print("ok")
+	def editarLivro():
+		print("ok")
+	def excluirLivro():
+		print("ok")
+	def solicitarLivro():
+		print("ok")
+	def devolverLivro():
+		print("ok")
 # -----------BIBLIOTECA-----------
 
 	#Função principal contendo todos os CRUDS de livros e usuario
@@ -88,32 +149,32 @@ def main():
 			if admin == "nao":
 				comando = input("1 - Solicitar livro\n2 - Devolver livro\n3 - Sair\n")
 				if comando == "1":
-					#solicitarLivro()
-				if comando == "2":
-					#DevolverLivro()
-				if comando == "3":
+					solicitarLivro()
+				elif comando == "2":
+					devolverLivro()
+				elif comando == "3":
 					break
 			if admin == "sim":
 				print("---BEM VINDO ADMIN---")
-				print("1 - Cadastrar Livro\n2 - Consultar livros\n3 - Editar Livros\n4 - Excluir Livro\n")
-				print("5 - Cadastrar usuário\n6 - Consultar usuarios\n7 - Editar Usuario\n8 - Excluir usuário\n9 - Sair")
+				print("1 - Cadastrar Livro\n2 - Consultar livros\n3 - Editar Livros\n4 - Excluir Livro")
+				print("5 - Cadastrar usuário\n6 - Consultar usuarios\n7 - Editar Usuario\n8 - Excluir usuário\n9 - Salvar e sair")
 				comando = input(".: ")
 				if comando == "1":
-					#CadastrarLivro()
+					cadastrarLivro()
 				elif comando == "2":
-					#ConsultarLivro()
+					consultarLivro()
 				elif comando == "3":
-					#EditarLivro()
+					editarLivro()
 				elif comando == "4":
-					#ExcluirLivro()
+					excluirLivro()
 				elif comando == "5":
 					dadosUsuario = cadastrarUsuario(dadosUsuario)
 				elif comando == "6":
-					#ConsultarUsuarios()
+					consultarUsuarios(dadosUsuario)
 				elif comando == "7":
-					#EditarUsuarios()
+					dadosUsuario = editarUsuarios(dadosUsuario)
 				elif comando == "8":
-					#ExcluirUsuario()
+					excluirUsuario()
 				elif comando == "9":
 					break
 
