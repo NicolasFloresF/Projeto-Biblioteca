@@ -5,6 +5,7 @@ o gerenciamento de uma biblioteca
 ● Gerenciamento de livros (CRUD).
 ● Registro de empréstimos e devoluções.
 """
+#teste commit
 #Estaremos trabalhando com JSON ao longo do trabalho 1
 import json
 
