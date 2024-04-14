@@ -5,11 +5,14 @@ o gerenciamento de uma biblioteca
 ● Gerenciamento de livros (CRUD).
 ● Registro de empréstimos e devoluções.
 """
+#Estaremos trabalhando com JSON ao longo do trabalho 1
+import json
 
 def main():
 
-#Estaremos trabalhando com JSON ao longo do trabalho 1
-	import json
+	# Limpa a tela
+	def limpar():
+		print("\033c", end="")
 
 
 	#Função para percorrer arquivo JSON e retornar seu conteúdo em uma variavel a ser operada
@@ -51,6 +54,8 @@ def main():
 			print("Nome ou senha incorreto, por favor tente novamente")
 			return "0"
 
+
+#-----------CRUDS USUARIO-----------
 	#Insere o novo usuario na variavel dados
 	def cadastrarUsuario(dados):
 		usuario = input("Insira seu nome: ")
@@ -67,39 +72,70 @@ def main():
 		dados["usuarios"].append(dicionario)
 
 		return dados
+	def listarUsuarios(dados):
+		for i in range(dados['usuarios']):
+			nome = dados["usuarios"][i]["nome"]
+			livros = dados["usuarios"][i]["livros_emprestimos"]
+			print(f"{nome} - {livros}")
+
+# -----------BIBLIOTECA-----------
 
 	#Função principal contendo todos os CRUDS de livros e usuario
 	def biblioteca(usuario, dadosUsuario, admin):
-
-		print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
-		if admin == "nao":
-			comando = input("1 - Solicitar livro\n2 - Devolver livro\n3 - Sair\n")
-		if admin == "sim":
-			print("1 - Cadastrar Livro\n2 - Consultar livros\n3 - Editar Livros\n4 - Excluir Livro\n")
-			print("5 - Cadastrar usuario\n6 - Consultar usuarios\n7 - Editar Usuario\n8 - Excluir Usuario\n")
-			comando = input(".:")
+		while True:
+			print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
+			if admin == "nao":
+				comando = input("1 - Solicitar livro\n2 - Devolver livro\n3 - Sair\n")
+				if comando == "1":
+					#solicitarLivro()
+				if comando == "2":
+					#DevolverLivro()
+				if comando == "3":
+					break
+			if admin == "sim":
+				print("---BEM VINDO ADMIN---")
+				print("1 - Cadastrar Livro\n2 - Consultar livros\n3 - Editar Livros\n4 - Excluir Livro\n")
+				print("5 - Cadastrar usuário\n6 - Consultar usuarios\n7 - Editar Usuario\n8 - Excluir usuário\n9 - Sair")
+				comando = input(".: ")
+				if comando == "1":
+					#CadastrarLivro()
+				elif comando == "2":
+					#ConsultarLivro()
+				elif comando == "3":
+					#EditarLivro()
+				elif comando == "4":
+					#ExcluirLivro()
+				elif comando == "5":
+					dadosUsuario = cadastrarUsuario(dadosUsuario)
+				elif comando == "6":
+					#ConsultarUsuarios()
+				elif comando == "7":
+					#EditarUsuarios()
+				elif comando == "8":
+					#ExcluirUsuario()
+				elif comando == "9":
+					break
 
 	def home(dados, quantUsuarios):
 		while True:
 			print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
 			comando = input("1 - Logar\n2 - Cadastrar\n3 - Finalizar programa\n")
 			if comando == "1":
-				#Limpa a tela
-				print("\033c", end="")
+
+				limpar()
 				#Caso o login ocorra com sucesso retorna o usuario para utilizar nas operações futuras
 				usuario = "0"
 				while usuario == "0":
 					usuario, admin = login(dados, quantUsuarios)
-				print("\033c", end="")
+				limpar()
 				#Envia as informações para a parte principal
 				biblioteca(usuario, dados, admin)
 			if comando == "2":
-				#Limpa a tela
-				print("\033c", end="")
+				limpar()
 				#Armazena o novo usuario na variavel dados
 				dados = cadastrarUsuario(dados)
 				admin = "nao"
-				print("\033c", end="")
+				limpar()
 				#Envia as informações para a parte principal
 				biblioteca(usuario, dados, admin)
 
