@@ -10,14 +10,14 @@ def main():
 
 #Estaremos trabalhando com JSON ao longo do trabalho 1
 	import json
-	
-	
+
+
 	#Função para percorrer arquivo JSON e retornar seu conteúdo em uma variavel a ser operada
 	def listar_itens(nomeArquivo):
 		with open(nomeArquivo, 'r') as arquivo:
 			dados = json.load(arquivo)
 		return dados
-	
+
 	def excluir_item(nomeArquivo, nomeProcurado):
 		cont = 0
 		auxIndice = 0
@@ -26,20 +26,20 @@ def main():
 			linhasIndividuais = []
 			for aux in arquivo:
 				linhas.append(aux)
-			for i in range(len(linhas)):	
+			for i in range(len(linhas)):
 				linhasIndividuais.append(linhas[i].split(','))
 			for selecionaLinha in linhasIndividuais:
 				for campo in selecionaLinha:
 					cont += 1
 					if campo  == nomeProcurado:
 						auxIndice = cont
-						
+
 			auxIndice = int(((auxIndice+1)/2)-1)
 			del linhasIndividuais[auxIndice]
-			
-			
-	
-	#Verificação de credencias de login        
+
+
+
+	#Verificação de credencias de login
 	def login(dados, quantUsuarios):
 			print("---LOGIN---")
 			usuario = input("Insira seu nome: ")
@@ -47,25 +47,38 @@ def main():
 			for i in range(quantUsuarios):
 				if usuario == dados["usuarios"][i]["nome"] and senha == dados["usuarios"][i]["senha"]:
 					print(f"SEJA BEM VINDO {usuario}")
-					return usuario
+					return usuario, dados["usuarios"][i]["admin"]
 			print("Nome ou senha incorreto, por favor tente novamente")
 			return "0"
+
 	#Insere o novo usuario na variavel dados
 	def cadastrarUsuario(dados):
 		usuario = input("Insira seu nome: ")
 		senha = input("Insira sua senha: ")
 		admin = "nao"
 		livros_emprestimo = []
-		#criar algoritmo para juntar os dados acima em um dicionario e adicionar isso na lista "dados" 
-		dados["usuarios"].append("receber dicionario")
-		
+		#criar algoritmo para juntar os dados acima em um dicionario e adicionar isso na lista "dados"
+		dicionario = {
+			'nome': usuario,
+			'senha': senha,
+			'admin': "nao",
+			'livros_emprestimos': []
+		}
+		dados["usuarios"].append(dicionario)
+
 		return dados
-		
-	
+
 	#Função principal contendo todos os CRUDS de livros e usuario
-	def biblioteca(usuario, dadosUsuario):
-		print("teste")
-			
+	def biblioteca(usuario, dadosUsuario, admin):
+
+		print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
+		if admin == "nao":
+			comando = input("1 - Solicitar livro\n2 - Devolver livro\n3 - Sair\n")
+		if admin == "sim":
+			print("1 - Cadastrar Livro\n2 - Consultar livros\n3 - Editar Livros\n4 - Excluir Livro\n")
+			print("5 - Cadastrar usuario\n6 - Consultar usuarios\n7 - Editar Usuario\n8 - Excluir Usuario\n")
+			comando = input(".:")
+
 	def home(dados, quantUsuarios):
 		while True:
 			print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
@@ -76,23 +89,24 @@ def main():
 				#Caso o login ocorra com sucesso retorna o usuario para utilizar nas operações futuras
 				usuario = "0"
 				while usuario == "0":
-					usuario = login(dados, quantUsuarios)
+					usuario, admin = login(dados, quantUsuarios)
 				print("\033c", end="")
 				#Envia as informações para a parte principal
-				biblioteca(usuario, dados)
+				biblioteca(usuario, dados, admin)
 			if comando == "2":
 				#Limpa a tela
 				print("\033c", end="")
 				#Armazena o novo usuario na variavel dados
 				dados = cadastrarUsuario(dados)
+				admin = "nao"
 				print("\033c", end="")
 				#Envia as informações para a parte principal
-				#biblioteca(usuario, dados)
-				
+				biblioteca(usuario, dados, admin)
+
 			if comando == "3":
 				print("Obrigado por utilizar nosso sistema.\nAtt: \n-EdCarvalho\n-NiFlores")
 				break
-			
+
 	dados = listar_itens("usuario.json")
 	quantUsuarios = len(dados['usuarios'])
 	print("------SEJA BEM VINDO A BIBLIOTECA 7000------")
