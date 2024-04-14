@@ -1,5 +1,12 @@
+"""
+Construção de sistema para automatizar
+o gerenciamento de uma biblioteca
+● Gerenciamento de usuários (CRUD).
+● Gerenciamento de livros (CRUD).
+● Registro de empréstimos e devoluções.
+"""
+
 def main():
-#Descrição do problema
 
 #Estaremos trabalhando com JSON ao longo do trabalho 1
 	import json
