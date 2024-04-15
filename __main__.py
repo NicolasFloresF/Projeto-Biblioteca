@@ -24,22 +24,6 @@ def carregar_usuarios(nomeArquivo):
     return dados
 
 
-# Verificação de credencias de login
-def login(dados, quantUsuarios):
-    print("---LOGIN---")
-    usuario = input("Insira seu nome: ")
-    senha = input("Insira sua senha: ")
-    for i in range(quantUsuarios):
-        if (
-            usuario == dados["usuarios"][i]["nome"]
-            and senha == dados["usuarios"][i]["senha"]
-        ):
-            print(f"SEJA BEM VINDO {usuario}")
-            return usuario, dados["usuarios"][i]["admin"]
-    print("Nome ou senha incorreto, por favor tente novamente")
-    return "0", "0"
-
-
 # Persiste os dados nos arquivos json
 def guardarDados(nomeArquivo, dadosUsuario):
     # persistir também os dados dos livros
@@ -57,8 +41,6 @@ def cadastrarUsuario(dados):
     id = dados["usuarios"][-1]["id"] + 1
     usuario = input("Insira seu nome: ")
     senha = input("Insira sua senha: ")
-    admin = "nao"
-    livros_emprestimo = []
     # criar algoritmo para juntar os dados acima em um dicionario e adicionar isso na lista "dados"
     novoUsuario = {
         "id": id,
@@ -75,69 +57,102 @@ def cadastrarUsuario(dados):
 
 
 # Retorna a lista de todos os usuários cadastrados e seus livros emprestados
-def consultarUsuarios(dados):
+def consultarUsuarios(dados, waitInp=TRUE):
     usuarios = dados["usuarios"]
 
     print(tabulate(usuarios, headers="keys", tablefmt="github"))
-    input("Tecle Enter para sair .: ")
-    limpar()
+    if waitInp:
+        input("Tecle Enter para sair.: ")
+        limpar()
 
 
 # Seleciona o usuário através do nome e permite a edição dos seus dados
 def editarUsuarios(dados):
-    usuario = input("Digite o usuario a ser alterado.: ")
-    flag = 0
-    for i in range(len(dados["usuarios"])):
-        if usuario == dados["usuarios"][i]["nome"]:
-            flag = 1
-            print("Nome\nSenha\nAdmin")
-            campoAlterado = input("Digite o campo que deseja alterar.: ")
-            if campoAlterado == "Nome":
-                nome = input("Digite o novo nome.: ")
-                dados["usuarios"][i]["nome"] = nome
-                limpar()
-                print("Nome alterado com sucesso")
-            elif campoAlterado == "Senha":
-                senha = input("Digite a nova senha.: ")
-                dados["usuarios"][i]["senha"] = senha
-                limpar()
-                print("Senha alterada com sucesso")
-            elif campoAlterado == "Admin":
-                admin = input("Digite sim ou nao para o campo admin.: ")
-                dados["usuarios"][i]["admin"] = admin
-                if admin == "sim":
-                    limpar()
-                    print(f"{usuario} agora é admin")
-                elif admin == "nao":
-                    limpar()
-                    print(f"Acesso admin retirado de {usuario}")
-    if flag == 0:
+    usuarios = dados["usuarios"]
+    flag = FALSE
+
+    while TRUE:
+        consultarUsuarios(dados, FALSE)
+        usuarioId = input(
+            "Digite o id do usuario a ser alterado ou pressione enter para sair.: "
+        )
+
+        if usuarioId == "":
+            break
         limpar()
-        print("Usuario nao encontrado")
+
+        for usuario in usuarios:
+            if str(usuario["id"]) == usuarioId:
+                flag = TRUE
+                break
+
+        if flag:
+            while TRUE:
+                print(
+                    f"1 - nome: {usuario['nome']}\n2 - senha: {usuario['senha']}\n3 - admin: {usuario['admin']}\n4 - voltar"
+                )
+                comando = input("Digite o que deseja alterar.: ")
+                if comando == "1":
+                    usuario["nome"] = input("Digite o novo nome.: ")
+                    limpar()
+                elif comando == "2":
+                    usuario["senha"] = input("Digite a nova senha.: ")
+                    limpar()
+                elif comando == "3":
+                    if usuario["admin"] == "sim":
+                        usuario["admin"] = "nao"
+                        limpar()
+                        print(f"{usuario['nome']} deixou de ser administrador!")
+                    else:
+                        usuario["admin"] = "sim"
+                        limpar()
+                        print(f"{usuario['nome']} virou administrador!")
+                elif comando == "4":
+                    limpar()
+                    break
+        else:
+            print("Não existe um usuario com este id")
+
     return dados
 
 
 # Exclui o usuário a partir do seu nome
 def excluirUsuario(dados):
-    usuario = input("Digite o usuario a ser excluido.: ")
-    flag = 0
-    for i in range(len(dados["usuarios"])):
-        if usuario == dados["usuarios"][i]["nome"]:
-            flag = 1
-            print(f"Deseja mesmo excluir {usuario}?")
-            print("Sim\nNao")
-            confirmacao = input(".: ")
-            if confirmacao == "Sim":
-                del dados["usuarios"][i]
+    usuarios = dados["usuarios"]
+    flag = FALSE
+
+    while TRUE:
+        consultarUsuarios(dados, FALSE)
+        usuarioId = input(
+            "Digite o id do usuario a ser excluido ou pressione enter para sair.: "
+        )
+
+        if usuarioId == "":
+            break
+
+        for i in range(len(usuarios)):
+            if str(usuarios[i]["id"]) == usuarioId:
+                flag = TRUE
+                break
+
+        if flag:
+            while TRUE:
+                confirmacao = input(
+                    f"Deseja mesmo excluir {usuarios[i]['titulo']}? [Sim/Nao].: "
+                )
+                if confirmacao == "Sim":
+                    del usuarios[i]
+                    limpar()
+                    print("usuario excluido com sucesso")
+                    break
+                elif confirmacao == "Nao":
+                    limpar()
+                    print("Operação abortada")
+                    break
                 limpar()
-                print("Usuario excluido com sucesso")
-            elif confirmacao == "Nao":
-                limpar()
-                print("Operação abortada")
-    if flag == 0:
-        limpar()
-        print("Usuario não encontrado")
-    return dados
+        else:
+            limpar()
+            print("Não existe um usuario com este id")
 
 
 # -----------CRUDS LIVROS-----------
@@ -145,12 +160,12 @@ def excluirUsuario(dados):
 
 def cadastrarLivro(dados):
     id = dados["livros"][-1]["id"] + 1
-    titulo = input("Insira o titulo do livro: ")
-    autor = input("Insira o autor do livro: ")
-    ano = input("Insira o ano do livro: ")
-    idioma = input("Insira o idioma do livro: ")
-    paginas = input("Insira quantidade de paginas do livro: ")
-    editora = input("Insira a editora do livro: ")
+    titulo = input("Insira o titulo do livro.: ")
+    autor = input("Insira o autor do livro.: ")
+    ano = input("Insira o ano do livro.: ")
+    idioma = input("Insira o idioma do livro.: ")
+    paginas = input("Insira quantidade de paginas do livro.: ")
+    editora = input("Insira a editora do livro.: ")
     # criar algoritmo para juntar os dados acima em um dicionario e adicionar isso na lista "dados"
     novoLivro = {
         "id": id,
@@ -160,6 +175,7 @@ def cadastrarLivro(dados):
         "idioma": idioma,
         "paginas": paginas,
         "editora": editora,
+        "locado": False
     }
     dados["livros"].append(novoLivro)
     limpar()
@@ -173,89 +189,203 @@ def consultarLivro(dados, waitInp=TRUE):
 
     print(tabulate(livros, headers="keys", tablefmt="github"))
     if waitInp:
-        input("Tecle Enter para sair .: ")
+        input("Tecle Enter para sair.: ")
         limpar()
 
 
 def editarLivro(dados):
     livros = dados["livros"]
-    consultarLivro(dados, FALSE)
     flag = FALSE
 
-    livroId = input("Digite o id do livro a ser alterado.: ")
-    limpar()
+    while TRUE:
+        consultarLivro(dados, FALSE)
+        livroId = input(
+            "Digite o id do livro a ser alterado ou pressione enter para sair.: "
+        )
 
-    for livro in livros:
-        if livro["id"] == int(livroId):
-            flag = TRUE
-
-    if flag:
-        ...
-    else:
-        print("Livro não encontrado!")
-        input("Tecle Enter para sair .: ")
+        if livroId == "":
+            break
         limpar()
 
+        for livro in livros:
+            if str(livro["id"]) == livroId:
+                flag = TRUE
+                break
 
-def excluirLivro():
-    print("ok")
+        if flag:
+            while TRUE:
+                print(
+                    f"1 - titulo: {livro['titulo']}\n2 - autor: {livro['autor']}\n3 - ano: {livro['ano']}"
+                )
+                print(
+                    f"4 - idioma: {livro['idioma']}\n5 - paginas {livro['paginas']}\n6 - editora: {livro['editora']}\n7 - Voltar"
+                )
+                comando = input("Digite o que deseja alterar.: ")
+                if comando == "1":
+                    livro["titulo"] = input("Digite o novo titulo.: ")
+                elif comando == "2":
+                    livro["autor"] = input("Digite o novo autor.: ")
+                elif comando == "3":
+                    livro["ano"] = input("Digite o novo ano.: ")
+                elif comando == "4":
+                    livro["idioma"] = input("Digite o novo idioma.: ")
+                elif comando == "5":
+                    livro["paginas"] = input("Digite o novo paginas.: ")
+                elif comando == "6":
+                    livro["editora"] = input("Digite o novo editora.: ")
+                elif comando == "7":
+                    limpar()
+                    break
+                limpar()
+        else:
+            print("Não existe um livro com este id")
+
+    return dados
 
 
+def excluirLivro(dados):
+    livros = dados["livros"]
+    flag = FALSE
+
+    while TRUE:
+        consultarLivro(dados, FALSE)
+        livroId = input(
+            "Digite o id do livro a ser excluido ou pressione enter para sair.: "
+        )
+
+        if livroId == "":
+            break
+
+        for i in range(len(livros)):
+            if str(livros[i]["id"]) == livroId:
+                flag = TRUE
+                break
+
+        if flag:
+            while TRUE:
+                confirmacao = input(
+                    f"Deseja mesmo excluir {livros[i]['titulo']}? [Sim/Nao].: "
+                )
+                if confirmacao == "Sim":
+                    del livros[i]
+                    limpar()
+                    print("Livro excluido com sucesso")
+                    break
+                elif confirmacao == "Nao":
+                    limpar()
+                    print("Operação abortada")
+                    break
+                limpar()
+        else:
+            limpar()
+            print("Não existe um livro com este id")
+
+    return dados
+
+
+# disponibilidade de livros
+# - (pode ser editado se estiver em empréstimo?)
+# necessidade de listar os empréstimos de livros?
 def solicitarLivro():
-    print("ok")
+    ...
 
 
 def devolverLivro():
-    print("ok")
+    ...
+
+
+def editaConta():
+    ...
+
+def consultaLivros():
+    ...
 
 
 # -----------BIBLIOTECA-----------
 
 
 # Função principal contendo todos os CRUDS de livros e usuario
-def biblioteca(dados, admin):
+def biblioteca(dados, admin, sessionId):
     while True:
         print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
         if admin == "nao":
-            comando = input("1 - Solicitar livro\n2 - Devolver livro\n3 - Sair\n")
+            comando = input(
+                "1 - Solicitar livro\n2 - Devolver livro\n3 - Meus livros\n4 - Editar conta\n5 - Sair\n"
+            )
             if comando == "1":
                 solicitarLivro()
             elif comando == "2":
                 devolverLivro()
             elif comando == "3":
+                editaConta()
+            elif comando == "4":
+                consultaLivros()
+            elif comando == "4":
                 guardarDados("dados.json", dados)
                 break
         if admin == "sim":
-            print("---BEM VINDO ADMIN---")
             print(
-                "1 - Cadastrar Livro\n2 - Consultar livros\n3 - Editar Livros\n4 - Excluir Livro"
+                "Gerenciamento de livros: \n1 - Cadastrar Livro\n2 - Consultar livros\n3 - Editar Livros\n4 - Excluir Livro"
             )
             print(
-                "5 - Cadastrar usuário\n6 - Consultar usuarios\n7 - Editar Usuario\n8 - Excluir usuário\n9 - Salvar e sair"
+                "\nGerenciamento de usuarios: \n5 - Cadastrar usuário\n6 - Consultar usuarios\n7 - Editar Usuario\n8 - Excluir usuário\n9 - Salvar e sair"
             )
             comando = input(".: ")
             if comando == "1":
+                limpar()
                 dados = cadastrarLivro(dados)
             elif comando == "2":
+                limpar()
                 consultarLivro(dados)
             elif comando == "3":
+                limpar()
                 dados = editarLivro(dados)
             elif comando == "4":
+                limpar()
                 dados = excluirLivro(dados)
             elif comando == "5":
+                limpar()
                 dados = cadastrarUsuario(dados)
             elif comando == "6":
+                limpar()
                 consultarUsuarios(dados)
             elif comando == "7":
+                limpar()
                 dados = editarUsuarios(dados)
             elif comando == "8":
+                limpar()
                 dados = excluirUsuario(dados)
             elif comando == "9":
+                limpar()
                 guardarDados("dados.json", dados)
-                break
+                exit()
+                # break
+        limpar()
 
 
-def home(dados, quantUsuarios):
+# Verificação de credencias de login
+def login(dados):
+    usuarios = dados["usuarios"]
+    limpar()
+    while TRUE:
+        print("---LOGIN---")
+        usuario = input("Insira seu nome: ")
+        senha = input("Insira sua senha: ")
+        for i in range(len(usuarios)):
+            if usuario == usuarios[i]["nome"] and senha == usuarios[i]["senha"]:
+                limpar()
+                print(f"SEJA BEM VINDO {usuario}")
+                biblioteca(dados, usuarios[i]["admin"], i)
+                # return usuario, dados["usuarios"][i]["admin"]
+        limpar()
+        print("Nome ou senha incorreto, por favor tente novamente")
+    # return "0", "0"
+
+
+def home():
+    dados = carregar_usuarios("dados.json")
+    quantUsuarios = len(dados["usuarios"])
+
     while True:
         print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
         comando = input("1 - Logar\n2 - Cadastrar\n3 - Finalizar programa\n")
@@ -303,11 +433,7 @@ def janela_login():
 
 def main():
     dados = carregar_usuarios("dados.json")
-
-    quantUsuarios = len(dados["usuarios"])
-    print("------SEJA BEM VINDO A BIBLIOTECA 7000------")
-    print(f"-TEMOS {quantUsuarios} USUARIOS CADASTRADOS-")
-    home(dados, quantUsuarios)
+    login(dados)
 
 
 if __name__ == "__main__":
