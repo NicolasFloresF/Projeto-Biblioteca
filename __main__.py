@@ -10,6 +10,7 @@ o gerenciamento de uma biblioteca
 import json
 from tkinter import *
 from tabulate import tabulate
+from getpass import getpass
 
 
 # Limpa a tela
@@ -30,7 +31,6 @@ def guardarDados(nomeArquivo, dadosUsuario):
     with open(nomeArquivo, "w") as arquivo:
         json.dump(dadosUsuario, arquivo, indent=4)
     limpar()
-    print("Usuarios Atualizados")
 
 
 # -----------CRUDS USUARIO-----------
@@ -40,7 +40,18 @@ def guardarDados(nomeArquivo, dadosUsuario):
 def cadastrarUsuario(dados):
     id = dados["usuarios"][-1]["id"] + 1
     usuario = input("Insira seu nome: ")
-    senha = input("Insira sua senha: ")
+    while TRUE:
+        senha = getpass("Insira sua senha: ")
+        confirma = getpass("Confirme sua senha: ")
+        if(senha == ''):
+            limpar()
+            print("Senha não pode ser vazia, tente novamente")
+        elif(senha != confirma):
+            limpar()
+            print("Senhas não coincidem, tente novamente")
+        else:
+            break
+
     # criar algoritmo para juntar os dados acima em um dicionario e adicionar isso na lista "dados"
     novoUsuario = {
         "id": id,
@@ -283,8 +294,11 @@ def excluirLivro(dados):
     return dados
 
 
+# varios livros?
+# crud de registros
 # disponibilidade de livros
-# - (pode ser editado se estiver em empréstimo?)
+
+# - (pode ser editado se estiver em empréstimo?) pode editar
 # necessidade de listar os empréstimos de livros?
 def solicitarLivro():
     ...
@@ -294,8 +308,27 @@ def devolverLivro():
     ...
 
 
-def editaConta():
-    ...
+def editaConta(dados, id):
+    usuarios = dados["usuarios"]
+    while TRUE:
+        print(
+            f"1 - nome: {usuarios[id]['nome']}\n2 - senha"
+        )
+        comando = input("Digite o que deseja alterar.: ")
+        if comando == "1":
+            usuarios[id]["nome"] = input("Digite o novo nome.: ")
+        elif comando == "2":
+            while TRUE:
+                senha = getpass("Insira sua senha atual: ")
+                if usuarios[id]["senha"] == senha:
+                    usuarios[id]["senha"] = input("Digite a nova senha.: ")
+                else:
+                    limpar()
+                    print("senha incorreta, tente novamente!")
+
+    input("Tecle Enter para sair.: ")
+
+
 
 def consultaLivros():
     ...
@@ -310,14 +343,14 @@ def biblioteca(dados, admin, sessionId):
         print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
         if admin == "nao":
             comando = input(
-                "1 - Solicitar livro\n2 - Devolver livro\n3 - Meus livros\n4 - Editar conta\n5 - Sair\n"
+                "1 - Solicitar livro\n2 - Devolver livro\n3 - Editar conta\n4 - Meus livros\n5 - Sair\n"
             )
             if comando == "1":
                 solicitarLivro()
             elif comando == "2":
                 devolverLivro()
             elif comando == "3":
-                editaConta()
+                editaConta(dados,sessionId)
             elif comando == "4":
                 consultaLivros()
             elif comando == "4":
@@ -370,7 +403,7 @@ def login(dados):
     while TRUE:
         print("---LOGIN---")
         usuario = input("Insira seu nome: ")
-        senha = input("Insira sua senha: ")
+        senha = getpass("Insira sua senha: ")
         for i in range(len(usuarios)):
             if usuario == usuarios[i]["nome"] and senha == usuarios[i]["senha"]:
                 limpar()
@@ -411,24 +444,6 @@ def home():
         if comando == "3":
             print("Obrigado por utilizar nosso sistema.\nAtt: \n-EdCarvalho\n-NiFlores")
             break
-
-
-def tkLogin(user): ...
-
-
-def janela_login():
-    janela = Tk()
-    janela.title("BIBLIOTECA 7000")
-    Label(janela, text="Usuário").grid(row=0, column=0)
-    Label(janela, text="Senha").grid(row=1, column=0)
-    user = Entry(janela)
-    user.grid(row=0, column=1)
-    senha = Entry(janela)
-    senha.grid(row=1, column=1)
-    button = Button(
-        janela, text="Login", width=25, command=lambda: tkLogin(user.get())
-    ).grid(row=3, column=1)
-    janela.mainloop()
 
 
 def main():
