@@ -10,8 +10,7 @@ o gerenciamento de uma biblioteca
 import json
 import bcrypt
 from getpass import getpass
-import tabulate
-
+from tabulate import tabulate
 
 
 # Limpa a tela
