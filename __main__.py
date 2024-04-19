@@ -9,7 +9,7 @@ o gerenciamento de uma biblioteca
 # Estaremos trabalhando com JSON ao longo do trabalho 1
 import json
 import bcrypt
-import getpass
+from getpass import getpass
 import tabulate
 
 
