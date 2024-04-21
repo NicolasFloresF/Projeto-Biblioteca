@@ -94,7 +94,10 @@
             "nome": "Nicolas",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
             "admin": "nao",
-            "livros_emprestimos": []
+            "livros_emprestimos": [
+                1,
+                2
+            ]
         },
         {
             "id": 13,
@@ -305,6 +308,24 @@
             "paginas": "96",
             "editora": "Reynal & Hitchcock",
             "estoque": 1
+        }
+    ],
+    "emprestimos": [
+        {
+            "id": 1,
+            "livro": 1,
+            "usuario": 12,
+            "data_emprestimo": "21/04/2024",
+            "prazo": "28/04/2024",
+            "devolucao": ""
+        },
+        {
+            "id": 2,
+            "livro": 2,
+            "usuario": 12,
+            "data_emprestimo": "21/04/2024",
+            "prazo": "28/04/2024",
+            "devolucao": ""
         }
     ]
 }
