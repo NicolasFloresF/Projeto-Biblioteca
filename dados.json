@@ -106,6 +106,14 @@
             "senha": "$2b$12$8oDLj5XSm08vx7w6yEsxYOMALsqPEAQ8n2z5inIkneJ4b.0BlvaMe",
             "admin": "nao",
             "livros_emprestimos": []
+        },
+        {
+            "id": 14,
+            "nome": "teste",
+            "email": "teste@gmail.com",
+            "senha": "$2b$12$JhY4iDhrTrXlz5aOGBPaV.As7njan6iqbbDfUew3nDqEOyEeKSW26",
+            "admin": "nao",
+            "livros_emprestimos": []
         }
     ],
     "livros": [

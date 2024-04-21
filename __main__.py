@@ -316,7 +316,22 @@ def excluirLivro():
 # gerenciar varios livros (sistema de estoque e empréstimos)
 # crud de empréstimos (nova lista no json)
 # relatórios
-def solicitarLivro(id): ...
+
+def solicitarLivro(id): 
+    
+    usuarios = dados["usuarios"]
+    livros = dados["livros"]
+    usuario = usuarios[id]
+    func_lambda = lambda x: x if x > 0 else None
+
+    #filtrar apenas os livros em estoque
+    print("===== Livros Disponíveis =====")
+    print(tabulate(livros, tablefmt='github'))
+    
+
+    input("Tecle Enter para sair.: ")
+    limpar()
+    
 
 
 def devolverLivro(id): ...
