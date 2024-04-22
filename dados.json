@@ -5,118 +5,98 @@
             "email": "eduardo.carvalho@gmail.com",
             "nome": "Eduardo Carvalho",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "sim",
-            "livros_emprestimos": []
+            "admin": "sim"
         },
         {
             "id": 2,
             "email": "nicolas.flores@gmail.com",
             "nome": "Nicolas Flores",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "sim",
-            "livros_emprestimos": []
+            "admin": "sim"
         },
         {
             "id": 3,
             "email": "jon.doe@gmail.com",
             "nome": "Jon Doe",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "nao",
-            "livros_emprestimos": []
+            "admin": "nao"
         },
         {
             "id": 4,
             "email": "jon.jean@gmail.com",
             "nome": "Jon Jean",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "nao",
-            "livros_emprestimos": []
+            "admin": "nao"
         },
         {
             "id": 5,
             "email": "jon.jon@gmail.com",
             "nome": "Jon Jon",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "nao",
-            "livros_emprestimos": []
+            "admin": "nao"
         },
         {
             "id": 6,
             "email": "clark.kent@gmail.com",
             "nome": "Clark Kent",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "nao",
-            "livros_emprestimos": []
+            "admin": "nao"
         },
         {
             "id": 7,
             "email": "gaviao.arqueiro@gmail.com",
             "nome": "Gaviao Arqueiro",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "nao",
-            "livros_emprestimos": []
+            "admin": "nao"
         },
         {
             "id": 8,
             "email": "bruce.wayne@gmail.com",
             "nome": "Bruce Wayne",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "nao",
-            "livros_emprestimos": []
+            "admin": "nao"
         },
         {
             "id": 9,
             "email": "barry.allen@gmail.com",
             "nome": "Barry Allen",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "nao",
-            "livros_emprestimos": []
+            "admin": "nao"
         },
         {
             "id": 10,
             "email": "diana@gmail.com",
             "nome": "Diana",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "nao",
-            "livros_emprestimos": []
+            "admin": "nao"
         },
         {
             "id": 11,
             "email": "jose@gmail.com",
             "nome": "Jos\u00e9",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "nao",
-            "livros_emprestimos": []
+            "admin": "nao"
         },
         {
             "id": 12,
             "email": "nicolas@gmail.com",
             "nome": "Nicolas",
             "senha": "$2b$12$.52c7kC2mNYR5wzDiVAqm.r81yQodtr.3Nd/k4Nw8WH99pq43NUa.",
-            "admin": "nao",
-            "livros_emprestimos": [
-                1,
-                2
-            ]
+            "admin": "nao"
         },
         {
             "id": 13,
             "nome": "jose",
             "email": "josemaria@gmail.com",
             "senha": "$2b$12$8oDLj5XSm08vx7w6yEsxYOMALsqPEAQ8n2z5inIkneJ4b.0BlvaMe",
-            "admin": "nao",
-            "livros_emprestimos": []
+            "admin": "nao"
         },
         {
             "id": 14,
             "nome": "teste",
             "email": "teste@gmail.com",
-            "senha": "$2b$12$JhY4iDhrTrXlz5aOGBPaV.As7njan6iqbbDfUew3nDqEOyEeKSW26",
-            "admin": "nao",
-            "livros_emprestimos": [
-                19,
-                18
-            ]
+            "senha": "$2b$12$Djel1qoQD27CfdNt9x5vK./SRhycFIT0I32QoAPm8psVRKs81JSTq",
+            "admin": "nao"
         }
     ],
     "livros": [
@@ -314,18 +294,18 @@
     "emprestimos": [
         {
             "id": 1,
-            "livro": 1,
-            "usuario": 12,
-            "data_emprestimo": "21/04/2024",
-            "prazo": "28/04/2024",
+            "livro": 19,
+            "usuario": 13,
+            "data_emprestimo": "22/04/2024",
+            "prazo": "29/04/2024",
             "devolucao": ""
         },
         {
             "id": 2,
-            "livro": 2,
-            "usuario": 12,
-            "data_emprestimo": "21/04/2024",
-            "prazo": "28/04/2024",
+            "livro": 18,
+            "usuario": 13,
+            "data_emprestimo": "22/04/2024",
+            "prazo": "29/04/2024",
             "devolucao": ""
         }
     ]

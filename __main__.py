@@ -12,6 +12,7 @@ import bcrypt
 from getpass import getpass
 from tabulate import tabulate
 import datetime
+import copy
 
 
 # Limpa a tela
@@ -74,7 +75,6 @@ def cadastrarUsuario():
         "email": email,
         "senha": senhaHashed,
         "admin": "nao",
-        "livros_emprestimos": [],
     }
     dados["usuarios"].append(novoUsuario)
     limpar()
@@ -123,7 +123,8 @@ def editarUsuarios():
                     usuario["nome"] = input("Digite o novo nome.: ")
                     limpar()
                 elif comando == "2":
-                    usuario["senha"] = input("Digite a nova senha.: ")
+                    novaSenha = getpass("Digite a nova senha.: ")
+                    usuario["senha"] = bcrypt.hashpw(novaSenha.encode("utf8"), bcrypt.gensalt()).decode("utf-8")
                     limpar()
                 elif comando == "3":
                     if usuario["admin"] == "sim":
@@ -317,31 +318,110 @@ def excluirLivro():
 # crud de empréstimos (nova lista no json)
 # relatórios
 
+def meusLivros(id, waitInp=True):
+    usuarios = dados["usuarios"]
+    livros = dados["livros"]
+    emprestimos = copy.deepcopy(dados["emprestimos"])
+    usuario = usuarios[id]
+
+    #como printar apenas as informações necessárias para o usuario?
+    print("===== Meus Livros =====")
+    #sem dar update
+    emprestimos = list(filter(lambda i: i["usuario"] == id, emprestimos))
+    emprestimos = list(filter(lambda i: i["devolucao"] == "", emprestimos))
+
+    for emprestimo in emprestimos:
+        livroPorId = list(filter(lambda i: i["id"] == emprestimo["livro"], livros))
+        if len(livroPorId) > 0:
+            emprestimo["livro"] = livroPorId[0]["titulo"]
+
+    print(tabulate(emprestimos,headers="keys"))
+
+    if(waitInp):
+        input("\nTecle Enter para sair.: ")
+        limpar()
+
 def solicitarLivro(id): 
-    
     usuarios = dados["usuarios"]
     livros = dados["livros"]
     usuario = usuarios[id]
-    livroEscolhido = 1
 
-    while livroEscolhido != -1:
-        #filtrar apenas os livros em estoque
+    while True:
+        flag = False
+        livros = list(filter(lambda i: i["estoque"] > 0, livros))
         print("===== Livros Disponíveis =====")
         print(tabulate(livros, tablefmt='github'))
 
-        livroEscolhido = int(input("Insira o ID do livro\nTecle Enter para sair.: "))
-        if livros[livroEscolhido-1]["id"] == livroEscolhido:
-            livros[livroEscolhido-1]["estoque"] -= 1
-            usuarios[id]["livros_emprestimos"].append(livroEscolhido)
-            livroEscolhido = -1
-            print(f"Solicitação do livro {livros[livroEscolhido-1]['titulo']} realizada com sucesso sucesso")
+        livroId = input("Insira o ID do livro ou Tecle Enter para sair.: ")
 
+        if livroId == "":
+            break
+
+        for i in range(len(livros)):
+            if str(livros[i]["id"]) == livroId:
+                flag = True
+                break
+    
+        if flag:
+            if livros[i]["estoque"] > 0:
+                livros[i]["estoque"] -= 1
+                hoje = datetime.date.today()
+                if len(dados["emprestimos"]) == 0:
+                    emprestimoId = 1
+                else:
+                    emprestimoId = dados["emprestimos"][-1]["id"] + 1
+                emprestimo = {
+                    "id": emprestimoId,
+                    "livro": int(livroId),
+                    "usuario": id,
+                    "data_emprestimo": hoje.strftime("%d/%m/%Y"),
+                    "prazo": (hoje + datetime.timedelta(days=7)).strftime("%d/%m/%Y"),
+                    "devolucao": ""
+                }
+
+                dados["emprestimos"].append(emprestimo)
+
+                limpar()
+                print(f"Solicitação do livro {livros[i]['titulo']} realizada com sucesso sucesso")
+            else:
+                limpar()
+                print("Livro não disponivel")
         else:
             limpar()
-            print("ID inválido, por favor tente novamente")
+            print("ID inválido, tente novamente")
             
 
-def devolverLivro(id): ...
+def devolverLivro(id):
+    usuarios = dados["usuarios"]
+    livros = dados["livros"]
+    emprestimos = dados["emprestimos"]
+    usuario = usuarios[id]
+
+    while True:
+        emprestimos = list(filter(lambda i: i["usuario"] == id, emprestimos))
+        flag = False
+        meusLivros(id,False)
+        emprestimoId = input("\nInsira o ID do livro ou Tecle Enter para sair.: ")
+        limpar()
+
+        if emprestimoId == "":
+            break
+
+        for i in range(len(emprestimos)):
+            if str(emprestimos[i]["id"]) == emprestimoId:
+                flag = True
+                break
+        
+        if flag:
+            for j in range(len(livros)):
+                if livros[j]["id"] == emprestimos[i]["livro"]:
+                    livros[j]["estoque"] += 1
+
+            emprestimos[i]["devolucao"] = datetime.date.today().strftime("%d/%m/%Y")
+        else:
+            limpar()
+            print("ID inválido, tente novamente")
+    
 
 
 #edição de senha não está funcionando
@@ -350,32 +430,26 @@ def editaConta(id):
     while True:
         print(f"1 - nome: {usuarios[id]['nome']}\n2 - senha")
         comando = input("Digite o que deseja alterar ou tecle enter para sair.: ")
+        limpar()
         if comando == "1":
             usuarios[id]["nome"] = input("Digite o novo nome.: ")
+            limpar()
         elif comando == "2":
             while True:
                 senha = getpass("Insira sua senha atual: ")
-                if usuarios[id]["senha"] == senha:
-                    usuarios[id]["senha"] = input("Digite a nova senha.: ")
+                if  bcrypt.checkpw(
+                    senha.encode("utf-8"), usuarios[id]["senha"].encode("utf-8")
+                ):
+                    novaSenha = getpass("Digite a nova senha.: ")
+                    usuarios[id]["senha"] = bcrypt.hashpw(novaSenha.encode("utf8"), bcrypt.gensalt()).decode("utf-8")
+                    limpar()
+                    break
                 else:
                     limpar()
                     print("senha incorreta, tente novamente!")
         elif comando == "":
             limpar()
             break
-
-
-def meusLivros(id):
-    usuarios = dados["usuarios"]
-    livros = dados["livros"]
-    usuario = usuarios[id]
-
-    #como printar apenas as informações necessárias para o usuario?
-    print("===== Meus Livros =====")
-    print(tabulate(list(filter(lambda i: i["id"] in usuario["livros_emprestimos"], livros))))
-
-    input("Tecle Enter para sair.: ")
-    limpar()
 
 
 # -----------BIBLIOTECA-----------
