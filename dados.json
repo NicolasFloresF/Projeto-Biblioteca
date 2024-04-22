@@ -113,7 +113,10 @@
             "email": "teste@gmail.com",
             "senha": "$2b$12$JhY4iDhrTrXlz5aOGBPaV.As7njan6iqbbDfUew3nDqEOyEeKSW26",
             "admin": "nao",
-            "livros_emprestimos": []
+            "livros_emprestimos": [
+                19,
+                18
+            ]
         }
     ],
     "livros": [
@@ -295,7 +298,7 @@
             "idioma": "Ingl\u00eas",
             "paginas": "214",
             "editora": "Ward, Lock & Co.",
-            "estoque": 1
+            "estoque": 0
         },
         {
             "id": 19,
@@ -305,17 +308,7 @@
             "idioma": "Russo",
             "paginas": "1225",
             "editora": "The Russian Messenger",
-            "estoque": 1
-        },
-        {
-            "id": 20,
-            "titulo": "O Pequeno Pr\u00edncipe",
-            "autor": "Antoine de Saint-Exup\u00e9ry",
-            "ano": "1943",
-            "idioma": "Franc\u00eas",
-            "paginas": "96",
-            "editora": "Reynal & Hitchcock",
-            "estoque": 1
+            "estoque": 0
         }
     ],
     "emprestimos": [

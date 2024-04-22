@@ -322,21 +322,29 @@ def solicitarLivro(id):
     usuarios = dados["usuarios"]
     livros = dados["livros"]
     usuario = usuarios[id]
-    func_lambda = lambda x: x if x > 0 else None
+    livroEscolhido = 1
 
-    #filtrar apenas os livros em estoque
-    print("===== Livros Disponíveis =====")
-    print(tabulate(livros, tablefmt='github'))
-    
+    while livroEscolhido != -1:
+        #filtrar apenas os livros em estoque
+        print("===== Livros Disponíveis =====")
+        print(tabulate(livros, tablefmt='github'))
 
-    input("Tecle Enter para sair.: ")
-    limpar()
-    
+        livroEscolhido = int(input("Insira o ID do livro\nTecle Enter para sair.: "))
+        if livros[livroEscolhido-1]["id"] == livroEscolhido:
+            livros[livroEscolhido-1]["estoque"] -= 1
+            usuarios[id]["livros_emprestimos"].append(livroEscolhido)
+            livroEscolhido = -1
+            print(f"Solicitação do livro {livros[livroEscolhido-1]['titulo']} realizada com sucesso sucesso")
 
+        else:
+            limpar()
+            print("ID inválido, por favor tente novamente")
+            
 
 def devolverLivro(id): ...
 
 
+#edição de senha não está funcionando
 def editaConta(id):
     usuarios = dados["usuarios"]
     while True:
