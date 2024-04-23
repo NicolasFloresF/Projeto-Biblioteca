@@ -42,6 +42,7 @@ def guardarDados(nomeArquivo):
 
 # -----------CRUDS USUARIO ADMIN-----------
 
+
 # Insere o novo usuario na variavel dados
 def cadastrarUsuario():
     usuarios = dados["usuarios"]
@@ -55,8 +56,8 @@ def cadastrarUsuario():
         if list(filter(lambda i: i["email"] == email, usuarios)) == []:
             break
         else:
-            #teste = list(filter(lambda i: i["email"] == email, usuarios))
-            #print(teste)
+            # teste = list(filter(lambda i: i["email"] == email, usuarios))
+            # print(teste)
             print("Email já registrado no sistema!")
 
     while True:
@@ -128,7 +129,9 @@ def editarUsuarios():
                     limpar()
                 elif comando == "2":
                     novaSenha = getpass("Digite a nova senha.: ")
-                    usuario["senha"] = bcrypt.hashpw(novaSenha.encode("utf8"), bcrypt.gensalt()).decode("utf-8")
+                    usuario["senha"] = bcrypt.hashpw(
+                        novaSenha.encode("utf8"), bcrypt.gensalt()
+                    ).decode("utf-8")
                     limpar()
                 elif comando == "3":
                     if usuario["admin"] == "sim":
@@ -148,7 +151,7 @@ def editarUsuarios():
     return dados
 
 
-# Exclui o usuário a partir do seu nome
+# Exclui o usuário a partir do seu id
 def excluirUsuario():
     usuarios = dados["usuarios"]
 
@@ -187,37 +190,8 @@ def excluirUsuario():
             print("Não existe um usuario com este id")
 
 
-# -----------CRUDS USUARIO NAO ADMIN-----------
-
-#Permite a edição da conta pelo usuário
-def editaConta(id):
-    usuarios = dados["usuarios"]
-    while True:
-        print(f"1 - nome: {usuarios[id]['nome']}\n2 - senha")
-        comando = input("Digite o que deseja alterar ou tecle enter para sair.: ")
-        limpar()
-        if comando == "1":
-            usuarios[id]["nome"] = input("Digite o novo nome.: ")
-            limpar()
-        elif comando == "2":
-            while True:
-                senha = getpass("Insira sua senha atual: ")
-                if  bcrypt.checkpw(
-                    senha.encode("utf-8"), usuarios[id]["senha"].encode("utf-8")
-                ):
-                    novaSenha = getpass("Digite a nova senha.: ")
-                    usuarios[id]["senha"] = bcrypt.hashpw(novaSenha.encode("utf8"), bcrypt.gensalt()).decode("utf-8")
-                    limpar()
-                    break
-                else:
-                    limpar()
-                    print("senha incorreta, tente novamente!")
-        elif comando == "":
-            limpar()
-            break
-
-
 # -----------CRUDS LIVROS-----------
+
 
 def cadastrarLivro():
     id = dados["livros"][-1]["id"] + 1
@@ -344,24 +318,49 @@ def excluirLivro():
     return dados
 
 
-# TO DO:
-
-
-# gerenciar varios livros (sistema de estoque e empréstimos)
-# crud de empréstimos (nova lista no json)
-# relatórios
-
 # -----------GERENCIAMENTO DE CONTA DO USUARIO -----------
-#Exibe ao usuário os livros emprestados 
+
+
+# Permite a edição da conta pelo usuário
+def editaConta(id):
+    usuarios = dados["usuarios"]
+    while True:
+        print(f"1 - nome: {usuarios[id]['nome']}\n2 - senha")
+        comando = input("Digite o que deseja alterar ou tecle enter para sair.: ")
+        limpar()
+        if comando == "1":
+            usuarios[id]["nome"] = input("Digite o novo nome.: ")
+            limpar()
+        elif comando == "2":
+            while True:
+                senha = getpass("Insira sua senha atual: ")
+                if bcrypt.checkpw(
+                    senha.encode("utf-8"), usuarios[id]["senha"].encode("utf-8")
+                ):
+                    novaSenha = getpass("Digite a nova senha.: ")
+                    usuarios[id]["senha"] = bcrypt.hashpw(
+                        novaSenha.encode("utf8"), bcrypt.gensalt()
+                    ).decode("utf-8")
+                    limpar()
+                    break
+                else:
+                    limpar()
+                    print("senha incorreta, tente novamente!")
+        elif comando == "":
+            limpar()
+            break
+
+
+# Exibe ao usuário os livros emprestados
 def meusLivros(id, waitInp=True):
     usuarios = dados["usuarios"]
     livros = dados["livros"]
     emprestimos = copy.deepcopy(dados["emprestimos"])
     usuario = usuarios[id]
 
-    #como printar apenas as informações necessárias para o usuario?
+    # como printar apenas as informações necessárias para o usuario?
     print("===== Meus Livros =====")
-    #sem dar update
+    # sem dar update
     emprestimos = list(filter(lambda i: i["usuario"] == id, emprestimos))
     emprestimos = list(filter(lambda i: i["devolucao"] == "", emprestimos))
 
@@ -370,15 +369,15 @@ def meusLivros(id, waitInp=True):
         if len(livroPorId) > 0:
             emprestimo["livro"] = livroPorId[0]["titulo"]
 
-    print(tabulate(emprestimos,headers="keys"))
+    print(tabulate(emprestimos, headers="keys"))
 
-    if(waitInp):
+    if waitInp:
         input("\nTecle Enter para sair.: ")
         limpar()
 
 
-#Requisita o livro por seu id e insere na lista de livros_emprestimo do usuário
-def solicitarLivro(id): 
+# Requisita o livro por seu id e adciona um novo empréstimo
+def solicitarLivro(id):
     usuarios = dados["usuarios"]
     livros = dados["livros"]
     usuario = usuarios[id]
@@ -387,7 +386,7 @@ def solicitarLivro(id):
         flag = False
         livros = list(filter(lambda i: i["estoque"] > 0, livros))
         print("===== Livros Disponíveis =====")
-        print(tabulate(livros, tablefmt='github'))
+        print(tabulate(livros, tablefmt="github"))
 
         livroId = input("Insira o ID do livro ou Tecle Enter para sair.: ")
 
@@ -398,7 +397,7 @@ def solicitarLivro(id):
             if str(livros[i]["id"]) == livroId:
                 flag = True
                 break
-    
+
         if flag:
             if livros[i]["estoque"] > 0:
                 livros[i]["estoque"] -= 1
@@ -413,21 +412,24 @@ def solicitarLivro(id):
                     "usuario": id,
                     "data_emprestimo": hoje.strftime("%d/%m/%Y"),
                     "prazo": (hoje + datetime.timedelta(days=7)).strftime("%d/%m/%Y"),
-                    "devolucao": ""
+                    "devolucao": "",
                 }
 
                 dados["emprestimos"].append(emprestimo)
 
                 limpar()
-                print(f"Solicitação do livro {livros[i]['titulo']} realizada com sucesso sucesso")
+                print(
+                    f"Solicitação do livro {livros[i]['titulo']} realizada com sucesso sucesso"
+                )
             else:
                 limpar()
                 print("Livro não disponivel")
         else:
             limpar()
             print("ID inválido, tente novamente")
-            
 
+
+# devolve um livro do usuario
 def devolverLivro(id):
     usuarios = dados["usuarios"]
     livros = dados["livros"]
@@ -437,7 +439,7 @@ def devolverLivro(id):
     while True:
         emprestimos = list(filter(lambda i: i["usuario"] == id, emprestimos))
         flag = False
-        meusLivros(id,False)
+        meusLivros(id, False)
         emprestimoId = input("\nInsira o ID do livro ou Tecle Enter para sair.: ")
         limpar()
 
@@ -448,7 +450,7 @@ def devolverLivro(id):
             if str(emprestimos[i]["id"]) == emprestimoId:
                 flag = True
                 break
-        
+
         if flag:
             for j in range(len(livros)):
                 if livros[j]["id"] == emprestimos[i]["livro"]:
@@ -460,45 +462,19 @@ def devolverLivro(id):
             print("ID inválido, tente novamente")
 
 
-#edição de senha não está funcionando
-def editaConta(id):
-    usuarios = dados["usuarios"]
-    while True:
-        print(f"1 - nome: {usuarios[id]['nome']}\n2 - senha")
-        comando = input("Digite o que deseja alterar ou tecle enter para sair.: ")
-        limpar()
-        if comando == "1":
-            usuarios[id]["nome"] = input("Digite o novo nome.: ")
-            limpar()
-        elif comando == "2":
-            while True:
-                senha = getpass("Insira sua senha atual: ")
-                if  bcrypt.checkpw(
-                    senha.encode("utf-8"), usuarios[id]["senha"].encode("utf-8")
-                ):
-                    novaSenha = getpass("Digite a nova senha.: ")
-                    usuarios[id]["senha"] = bcrypt.hashpw(novaSenha.encode("utf8"), bcrypt.gensalt()).decode("utf-8")
-                    limpar()
-                    break
-                else:
-                    limpar()
-                    print("senha incorreta, tente novamente!")
-        elif comando == "":
-            limpar()
-            break
-
 # -----------RELATÓRIOS-----------
-def consultarEmprestimos():
-    ...
+def consultarEmprestimos(): ...
 
-def devolucoesAtrasadas():
-    ...
 
-def devolucoes():
-    ...
+def devolucoesAtrasadas(): ...
 
-def paraDevolucao():
-    ...
+
+def devolucoes(): ...
+
+
+def paraDevolucao(): ...
+
+
 # -----------BIBLIOTECA-----------
 # -----------ADMIN-----------
 def gerenciarUsuarios():
@@ -507,7 +483,7 @@ def gerenciarUsuarios():
         "2": consultarUsuarios,
         "3": editarUsuarios,
         "4": excluirUsuario,
-        "5" : "sair"
+        "5": "sair",
     }
 
     while True:
@@ -525,13 +501,14 @@ def gerenciarUsuarios():
         limpar()
         opcoes[comando]()
 
+
 def gerenciarLivros():
     opcoes = {
         "1": cadastrarLivro,
         "2": consultarLivro,
         "3": editarLivro,
         "4": excluirLivro,
-        "5" : "sair"
+        "5": "sair",
     }
 
     while True:
@@ -549,13 +526,14 @@ def gerenciarLivros():
         limpar()
         opcoes[comando]()
 
+
 def relatorios():
     opcoes = {
         "1": consultarEmprestimos,
         "2": devolucoes,
         "3": devolucoesAtrasadas,
         "4": paraDevolucao,
-        "5" : "sair"
+        "5": "sair",
     }
 
     while True:
@@ -572,6 +550,7 @@ def relatorios():
             break
         limpar()
         opcoes[comando]()
+
 
 # Função principal contendo todos os CRUDS de livros e usuario
 def biblioteca(sessionId):
@@ -602,7 +581,6 @@ def biblioteca(sessionId):
                     exit()
                 limpar()
 
-            
             opcoes[comando](sessionId)
 
         if usuarios[sessionId]["admin"] == "sim":
