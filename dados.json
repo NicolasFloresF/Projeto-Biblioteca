@@ -307,14 +307,6 @@
             "data_emprestimo": "22/04/2024",
             "prazo": "29/04/2024",
             "devolucao": "22/04/2024"
-        },
-        {
-            "id": 3,
-            "livro": 19,
-            "usuario": 13,
-            "data_emprestimo": "22/04/2024",
-            "prazo": "29/04/2024",
-            "devolucao": "22/04/2024"
         }
     ]
 }
