@@ -318,6 +318,7 @@ def excluirLivro():
 # crud de empréstimos (nova lista no json)
 # relatórios
 
+# -----------GERENCIAMENTO DE CONTA DO USUARIO -----------
 def meusLivros(id, waitInp=True):
     usuarios = dados["usuarios"]
     livros = dados["livros"]
@@ -451,7 +452,18 @@ def editaConta(id):
             limpar()
             break
 
+# -----------RELATÓRIOS-----------
+def consultarEmprestimos():
+    ...
 
+def devolucoesAtrasadas():
+    ...
+
+def devolucoes():
+    ...
+
+def paraDevolucao():
+    ...
 # -----------BIBLIOTECA-----------
 def gerenciarUsuarios():
     opcoes = {
@@ -502,7 +514,28 @@ def gerenciarLivros():
         opcoes[comando]()
 
 def relatorios():
-    ...
+    opcoes = {
+        "1": consultarEmprestimos,
+        "2": devolucoes,
+        "3": devolucoesAtrasadas,
+        "4": paraDevolucao,
+        "5" : "sair"
+    }
+
+    while True:
+        print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
+        comando = None
+        while comando not in opcoes.keys():
+            print(
+                "1 - Listar emprestimos\n2 - Listar Devoluções\n3 - Listar Devoluções atrasadas\n4 - Listar para devolução\n5 - Voltar"
+            )
+
+            comando = input(".: ")
+
+        if comando == "5":
+            break
+        limpar()
+        opcoes[comando]()
 
 # Função principal contendo todos os CRUDS de livros e usuario
 def biblioteca(sessionId):
