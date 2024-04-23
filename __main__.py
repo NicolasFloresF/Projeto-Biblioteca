@@ -463,16 +463,54 @@ def devolverLivro(id):
 
 
 # -----------RELATÓRIOS-----------
-def consultarEmprestimos(): ...
 
 
-def devolucoesAtrasadas(): ...
+def formataEmprestimos():
+    usuarios = dados["usuarios"]
+    livros = dados["livros"]
+    emprestimos = copy.deepcopy(dados["emprestimos"])
+
+    for emprestimo in emprestimos:
+        livroPorId = list(filter(lambda i: i["id"] == emprestimo["livro"], livros))
+        usuarioPorId = list(filter(lambda i: i["id"] == emprestimo["usuario"], usuarios))
+
+        if len(livroPorId) > 0 and len(usuarioPorId) > 0:
+            emprestimo["livro"] = livroPorId[0]["titulo"]
+            emprestimo["usuario"] = usuarioPorId[0]["nome"]
+    
+    return emprestimos
 
 
-def devolucoes(): ...
+def consultarEmprestimos():
+    emprestimos = formataEmprestimos()
+    print(tabulate(emprestimos, headers="keys"))
+    input("\nTecle Enter para sair.: ")
+    limpar()
 
 
-def paraDevolucao(): ...
+def devolucoesAtrasadas():
+    emprestimos = formataEmprestimos()
+    hoje = datetime.date.today().strftime("%d/%m/%Y")
+    emprestimos = list(filter(lambda i: datetime.datetime.strptime(i["prazo"],"%d/%m/%Y") < datetime.datetime.strptime(hoje,"%d/%m/%Y") and i["devolucao"] == "", emprestimos))
+    print(tabulate(emprestimos, headers="keys"))
+    input("\nTecle Enter para sair.: ")
+    limpar()
+
+
+def devolucoes():
+    emprestimos = formataEmprestimos()
+    emprestimos = list(filter(lambda i: i["devolucao"] != "", emprestimos))
+    print(tabulate(emprestimos, headers="keys"))
+    input("\nTecle Enter para sair.: ")
+    limpar()
+
+
+def paraDevolucao():
+    emprestimos = formataEmprestimos()
+    emprestimos = list(filter(lambda i: i["devolucao"] == "", emprestimos))
+    print(tabulate(emprestimos, headers="keys"))
+    input("\nTecle Enter para sair.: ")
+    limpar()
 
 
 # -----------BIBLIOTECA-----------
