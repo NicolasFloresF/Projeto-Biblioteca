@@ -6,11 +6,6 @@ o gerenciamento de uma biblioteca
 ● Registro de empréstimos e devoluções.
 """
 
-# TO DO:
-# gerenciar varios livros (sistema de estoque e empréstimos)
-# crud de empréstimos (nova lista no json)
-# relatórios
-
 # Estaremos trabalhando com JSON ao longo do trabalho 1
 import json
 import bcrypt
@@ -48,7 +43,12 @@ def cadastrarUsuario():
     usuarios = dados["usuarios"]
 
     id = dados["usuarios"][-1]["id"] + 1
-    nome = input("Insira seu nome: ")
+    nome = ""
+    while True:
+        if nome == "":
+            nome = input("Insira seu nome: ")
+        else:
+            break
 
     while True:
         email = input("Insira seu email: ")
@@ -110,8 +110,9 @@ def editarUsuarios():
         )
 
         if usuarioId == "":
+            limpar()
             break
-        limpar()
+            
 
         for usuario in usuarios:
             if str(usuario["id"]) == usuarioId:
@@ -163,6 +164,7 @@ def excluirUsuario():
         )
 
         if usuarioId == "":
+            limpar()
             break
 
         for i in range(len(usuarios)):
@@ -173,7 +175,7 @@ def excluirUsuario():
         if flag:
             while True:
                 confirmacao = input(
-                    f"Deseja mesmo excluir {usuarios[i]['titulo']}? [Sim/Nao].: "
+                    f"Deseja mesmo excluir {usuarios[i]['nome']}? [Sim/Nao].: "
                 )
                 if confirmacao == "Sim":
                     del usuarios[i]
@@ -239,8 +241,9 @@ def editarLivro():
         )
 
         if livroId == "":
+            limpar()
             break
-        limpar()
+        
 
         for livro in livros:
             if str(livro["id"]) == livroId:
@@ -289,6 +292,7 @@ def excluirLivro():
         )
 
         if livroId == "":
+            limpar()
             break
 
         for i in range(len(livros)):
