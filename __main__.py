@@ -46,7 +46,8 @@ def guardarDados(nomeArquivo):
 # Insere o novo usuario na variavel dados
 def cadastrarUsuario():
     usuarios = dados["usuarios"]
-
+    
+    print("===== Cadastro de Usuario =====")
     id = dados["usuarios"][-1]["id"] + 1
     nome = input("Insira seu nome: ")
 
@@ -56,18 +57,14 @@ def cadastrarUsuario():
         if list(filter(lambda i: i["email"] == email, usuarios)) == []:
             break
         else:
-            # teste = list(filter(lambda i: i["email"] == email, usuarios))
-            # print(teste)
             print("Email já registrado no sistema!")
 
     while True:
         senha = getpass("Insira sua senha: ")
         confirma = getpass("Confirme sua senha: ")
         if senha == "":
-            limpar()
             print("Senha não pode ser vazia, tente novamente")
         elif senha != confirma:
-            limpar()
             print("Senhas não coincidem, tente novamente")
         else:
             break
@@ -103,6 +100,7 @@ def editarUsuarios():
     usuarios = dados["usuarios"]
 
     while True:
+        print("===== Edição de Usuario =====")
         flag = False
         consultarUsuarios(False)
         usuarioId = input(
@@ -156,6 +154,7 @@ def excluirUsuario():
     usuarios = dados["usuarios"]
 
     while True:
+        print("===== Exclusão de Usuario =====")
         flag = False
         consultarUsuarios(False)
         usuarioId = input(
@@ -173,7 +172,7 @@ def excluirUsuario():
         if flag:
             while True:
                 confirmacao = input(
-                    f"Deseja mesmo excluir {usuarios[i]['titulo']}? [Sim/Nao].: "
+                    f"Deseja mesmo excluir {usuarios[i]['nome']}? [Sim/Nao].: "
                 )
                 if confirmacao == "Sim":
                     del usuarios[i]
@@ -194,6 +193,7 @@ def excluirUsuario():
 
 
 def cadastrarLivro():
+    print("Cadastro de Livros =====")
     id = dados["livros"][-1]["id"] + 1
     titulo = input("Insira o titulo do livro.: ")
     autor = input("Insira o autor do livro.: ")
@@ -230,8 +230,8 @@ def consultarLivro(waitInp=True):
 
 def editarLivro():
     livros = dados["livros"]
-
     while True:
+        print("===== Edição de Livros =====")
         flag = False
         consultarLivro(False)
         livroId = input(
@@ -280,8 +280,8 @@ def editarLivro():
 
 def excluirLivro():
     livros = dados["livros"]
-
     while True:
+        print("===== Exclusão de livros =====")
         flag = False
         consultarLivro(False)
         livroId = input(
@@ -325,6 +325,7 @@ def excluirLivro():
 def editaConta(id):
     usuarios = dados["usuarios"]
     while True:
+        print("===== Edição de conta =====")
         print(f"1 - nome: {usuarios[id]['nome']}\n2 - senha")
         comando = input("Digite o que deseja alterar ou tecle enter para sair.: ")
         limpar()
@@ -383,9 +384,9 @@ def solicitarLivro(id):
     usuario = usuarios[id]
 
     while True:
+        print("===== Livros Disponíveis =====")
         flag = False
         livros = list(filter(lambda i: i["estoque"] > 0, livros))
-        print("===== Livros Disponíveis =====")
         print(tabulate(livros, tablefmt="github"))
 
         livroId = input("Insira o ID do livro ou Tecle Enter para sair.: ")
@@ -435,8 +436,9 @@ def devolverLivro(id):
     livros = dados["livros"]
     emprestimos = dados["emprestimos"]
     usuario = usuarios[id]
-
+    
     while True:
+        print("===== Devolução de livros =====")
         emprestimos = list(filter(lambda i: i["usuario"] == id, emprestimos))
         flag = False
         meusLivros(id, False)
@@ -464,7 +466,6 @@ def devolverLivro(id):
 
 # -----------RELATÓRIOS-----------
 
-
 def formataEmprestimos():
     usuarios = dados["usuarios"]
     livros = dados["livros"]
@@ -483,6 +484,7 @@ def formataEmprestimos():
 
 def consultarEmprestimos():
     emprestimos = formataEmprestimos()
+    print("===== Lista de empréstimos =====")
     print(tabulate(emprestimos, headers="keys"))
     input("\nTecle Enter para sair.: ")
     limpar()
@@ -490,6 +492,7 @@ def consultarEmprestimos():
 
 def devolucoesAtrasadas():
     emprestimos = formataEmprestimos()
+    print("===== Lista de devoluções atrasadas =====")
     hoje = datetime.date.today().strftime("%d/%m/%Y")
     emprestimos = list(filter(lambda i: datetime.datetime.strptime(i["prazo"],"%d/%m/%Y") < datetime.datetime.strptime(hoje,"%d/%m/%Y") and i["devolucao"] == "", emprestimos))
     print(tabulate(emprestimos, headers="keys"))
@@ -499,6 +502,7 @@ def devolucoesAtrasadas():
 
 def devolucoes():
     emprestimos = formataEmprestimos()
+    print("===== Lista de livros a serem entregues =====")
     emprestimos = list(filter(lambda i: i["devolucao"] != "", emprestimos))
     print(tabulate(emprestimos, headers="keys"))
     input("\nTecle Enter para sair.: ")
@@ -508,6 +512,7 @@ def devolucoes():
 def paraDevolucao():
     emprestimos = formataEmprestimos()
     emprestimos = list(filter(lambda i: i["devolucao"] == "", emprestimos))
+    print("===== Lista de livros que já foram entregues =====")
     print(tabulate(emprestimos, headers="keys"))
     input("\nTecle Enter para sair.: ")
     limpar()
@@ -525,19 +530,21 @@ def gerenciarUsuarios():
     }
 
     while True:
-        print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
         comando = None
         while comando not in opcoes.keys():
+            print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
             print(
                 "1 - Cadastrar usuario\n2 - Consultar usuarios\n3 - Editar usuarios\n4 - Excluir usuario\n5 - Voltar"
             )
 
             comando = input(".: ")
+            limpar()
 
         if comando == "5":
             break
-        limpar()
+
         opcoes[comando]()
+        limpar()
 
 
 def gerenciarLivros():
@@ -550,19 +557,21 @@ def gerenciarLivros():
     }
 
     while True:
-        print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
         comando = None
         while comando not in opcoes.keys():
+            print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
             print(
                 "1 - Cadastrar Livro\n2 - Consultar livros\n3 - Editar Livros\n4 - Excluir Livro\n5 - Voltar"
             )
 
             comando = input(".: ")
+            limpar()
 
         if comando == "5":
             break
-        limpar()
+        
         opcoes[comando]()
+        limpar()
 
 
 def relatorios():
@@ -575,19 +584,21 @@ def relatorios():
     }
 
     while True:
-        print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
         comando = None
         while comando not in opcoes.keys():
+            print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
             print(
                 "1 - Listar emprestimos\n2 - Listar Devoluções\n3 - Listar Devoluções atrasadas\n4 - Listar para devolução\n5 - Voltar"
             )
 
             comando = input(".: ")
+            limpar()
 
         if comando == "5":
             break
-        limpar()
+        
         opcoes[comando]()
+        limpar()
 
 
 # Função principal contendo todos os CRUDS de livros e usuario
@@ -597,7 +608,6 @@ def biblioteca(sessionId):
 
     while True:
         comando = None
-        print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
 
         if usuarios[sessionId]["admin"] == "nao":
             opcoes = {
@@ -608,6 +618,7 @@ def biblioteca(sessionId):
             }
 
             while comando not in opcoes.keys():
+                print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
                 print(
                     "1 - Solicitar livro\n2 - Devolver livro\n3 - Editar conta\n4 - Meus livros\n5 - Sair"
                 )
@@ -629,6 +640,7 @@ def biblioteca(sessionId):
             }
 
             while comando not in opcoes.keys():
+                print("---SELECIONE UMA DAS OPÇÕES ABAIXO---")
                 print(
                     "1 - Gerenciamento de usuarios\n2 - Gerenciamento de livros\n3 - relatorios\n4 - Salvar e sair"
                 )
@@ -641,7 +653,7 @@ def biblioteca(sessionId):
                 limpar()
 
             opcoes[comando]()
-
+        
         limpar()
 
 
