@@ -6,6 +6,11 @@ o gerenciamento de uma biblioteca
 ● Registro de empréstimos e devoluções.
 """
 
+# TO DO:
+# gerenciar varios livros (sistema de estoque e empréstimos)
+# crud de empréstimos (nova lista no json)
+# relatórios
+
 # Estaremos trabalhando com JSON ao longo do trabalho 1
 import json
 import bcrypt
@@ -35,8 +40,7 @@ def guardarDados(nomeArquivo):
     limpar()
 
 
-# -----------CRUDS USUARIO-----------
-
+# -----------CRUDS USUARIO ADMIN-----------
 
 # Insere o novo usuario na variavel dados
 def cadastrarUsuario():
@@ -183,8 +187,37 @@ def excluirUsuario():
             print("Não existe um usuario com este id")
 
 
-# -----------CRUDS LIVROS-----------
+# -----------CRUDS USUARIO NAO ADMIN-----------
 
+#Permite a edição da conta pelo usuário
+def editaConta(id):
+    usuarios = dados["usuarios"]
+    while True:
+        print(f"1 - nome: {usuarios[id]['nome']}\n2 - senha")
+        comando = input("Digite o que deseja alterar ou tecle enter para sair.: ")
+        limpar()
+        if comando == "1":
+            usuarios[id]["nome"] = input("Digite o novo nome.: ")
+            limpar()
+        elif comando == "2":
+            while True:
+                senha = getpass("Insira sua senha atual: ")
+                if  bcrypt.checkpw(
+                    senha.encode("utf-8"), usuarios[id]["senha"].encode("utf-8")
+                ):
+                    novaSenha = getpass("Digite a nova senha.: ")
+                    usuarios[id]["senha"] = bcrypt.hashpw(novaSenha.encode("utf8"), bcrypt.gensalt()).decode("utf-8")
+                    limpar()
+                    break
+                else:
+                    limpar()
+                    print("senha incorreta, tente novamente!")
+        elif comando == "":
+            limpar()
+            break
+
+
+# -----------CRUDS LIVROS-----------
 
 def cadastrarLivro():
     id = dados["livros"][-1]["id"] + 1
@@ -319,6 +352,7 @@ def excluirLivro():
 # relatórios
 
 # -----------GERENCIAMENTO DE CONTA DO USUARIO -----------
+#Exibe ao usuário os livros emprestados 
 def meusLivros(id, waitInp=True):
     usuarios = dados["usuarios"]
     livros = dados["livros"]
@@ -342,6 +376,8 @@ def meusLivros(id, waitInp=True):
         input("\nTecle Enter para sair.: ")
         limpar()
 
+
+#Requisita o livro por seu id e insere na lista de livros_emprestimo do usuário
 def solicitarLivro(id): 
     usuarios = dados["usuarios"]
     livros = dados["livros"]
@@ -422,7 +458,6 @@ def devolverLivro(id):
         else:
             limpar()
             print("ID inválido, tente novamente")
-    
 
 
 #edição de senha não está funcionando
@@ -465,6 +500,7 @@ def devolucoes():
 def paraDevolucao():
     ...
 # -----------BIBLIOTECA-----------
+# -----------ADMIN-----------
 def gerenciarUsuarios():
     opcoes = {
         "1": cadastrarUsuario,
