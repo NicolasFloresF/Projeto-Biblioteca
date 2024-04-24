@@ -108,7 +108,7 @@
             "idioma": "Portugu\u00eas",
             "paginas": "240",
             "editora": "Principis",
-            "estoque": 1
+            "estoque": 5
         },
         {
             "id": 2,
@@ -118,7 +118,7 @@
             "idioma": "Ingl\u00eas",
             "paginas": "328",
             "editora": "Secker & Warburg",
-            "estoque": 1
+            "estoque": 2
         },
         {
             "id": 3,
@@ -128,7 +128,7 @@
             "idioma": "Portugu\u00eas",
             "paginas": "304",
             "editora": "Martins Fontes",
-            "estoque": 1
+            "estoque": 3
         },
         {
             "id": 4,
@@ -138,7 +138,7 @@
             "idioma": "Espanhol",
             "paginas": "992",
             "editora": "Francisco de Robles",
-            "estoque": 1
+            "estoque": 4
         },
         {
             "id": 5,
@@ -148,7 +148,7 @@
             "idioma": "Ingl\u00eas",
             "paginas": "432",
             "editora": "T. Egerton, Whitehall",
-            "estoque": 1
+            "estoque": 2
         },
         {
             "id": 6,
@@ -168,7 +168,7 @@
             "idioma": "Russo",
             "paginas": "551",
             "editora": "Editora Liter\u00e1ria",
-            "estoque": 1
+            "estoque": 6
         },
         {
             "id": 8,
@@ -178,7 +178,7 @@
             "idioma": "Portugu\u00eas",
             "paginas": "1200",
             "editora": "Martins Fontes",
-            "estoque": 1
+            "estoque": 4
         },
         {
             "id": 9,
@@ -188,7 +188,7 @@
             "idioma": "Ingl\u00eas",
             "paginas": "768",
             "editora": "Harper & Brothers",
-            "estoque": 1
+            "estoque": 5
         },
         {
             "id": 10,
@@ -198,7 +198,7 @@
             "idioma": "Russo",
             "paginas": "864",
             "editora": "The Russian Messenger",
-            "estoque": 1
+            "estoque": 3
         },
         {
             "id": 11,
@@ -208,7 +208,7 @@
             "idioma": "Ingl\u00eas",
             "paginas": "288",
             "editora": "Little, Brown and Company",
-            "estoque": 1
+            "estoque": 6
         },
         {
             "id": 12,
@@ -218,7 +218,7 @@
             "idioma": "Ingl\u00eas",
             "paginas": "112",
             "editora": "Secker & Warburg",
-            "estoque": 1
+            "estoque": 2
         },
         {
             "id": 13,
@@ -228,7 +228,7 @@
             "idioma": "Ingl\u00eas",
             "paginas": "118",
             "editora": "William Heinemann",
-            "estoque": 1
+            "estoque": 4
         },
         {
             "id": 14,
@@ -238,7 +238,7 @@
             "idioma": "Alem\u00e3o",
             "paginas": "315",
             "editora": "Kurt Wolff Verlag",
-            "estoque": 1
+            "estoque": 5
         },
         {
             "id": 15,
@@ -248,7 +248,7 @@
             "idioma": "Ingl\u00eas",
             "paginas": "464",
             "editora": "Thomas Cautley Newby",
-            "estoque": 1
+            "estoque": 5
         },
         {
             "id": 16,
@@ -258,7 +258,7 @@
             "idioma": "Espanhol",
             "paginas": "417",
             "editora": "Editorial Sudamericana",
-            "estoque": 1
+            "estoque": 6
         },
         {
             "id": 17,
@@ -268,7 +268,7 @@
             "idioma": "Franc\u00eas",
             "paginas": "1900",
             "editora": "A. Lacroix, Verboeckhoven & Cie.",
-            "estoque": 1
+            "estoque": 4
         },
         {
             "id": 18,
@@ -278,7 +278,7 @@
             "idioma": "Ingl\u00eas",
             "paginas": "214",
             "editora": "Ward, Lock & Co.",
-            "estoque": 1
+            "estoque": 2
         },
         {
             "id": 19,
@@ -295,7 +295,7 @@
         {
             "id": 1,
             "livro": 19,
-            "usuario": 13,
+            "usuario": 12,
             "data_emprestimo": "22/04/2024",
             "prazo": "29/04/2024",
             "devolucao": ""
@@ -303,7 +303,7 @@
         {
             "id": 2,
             "livro": 18,
-            "usuario": 13,
+            "usuario": 12,
             "data_emprestimo": "22/04/2024",
             "prazo": "29/04/2024",
             "devolucao": ""

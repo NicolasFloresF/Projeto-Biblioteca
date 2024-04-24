@@ -54,7 +54,7 @@ def cadastrarUsuario():
     while True:
         email = input("Insira seu email: ")
 
-        if list(filter(lambda i: i["email"] == email, usuarios)) == []:
+        if next(filter(lambda i: i["email"] == email, usuarios),None) == None:
             break
         else:
             print("Email já registrado no sistema!")
@@ -107,8 +107,8 @@ def editarUsuarios():
             "Digite o id do usuario a ser alterado ou pressione enter para sair.: "
         )
 
+        limpar()
         if usuarioId == "":
-            limpar()
             break
             
 
@@ -328,22 +328,23 @@ def excluirLivro():
 # Permite a edição da conta pelo usuário
 def editaConta(id):
     usuarios = dados["usuarios"]
+    usuario = usuarios[id]
     while True:
         print("===== Edição de conta =====")
-        print(f"1 - nome: {usuarios[id]['nome']}\n2 - senha")
+        print(f"1 - nome: {usuario['nome']}\n2 - senha")
         comando = input("Digite o que deseja alterar ou tecle enter para sair.: ")
         limpar()
         if comando == "1":
-            usuarios[id]["nome"] = input("Digite o novo nome.: ")
+            usuario["nome"] = input("Digite o novo nome.: ")
             limpar()
         elif comando == "2":
             while True:
                 senha = getpass("Insira sua senha atual: ")
                 if bcrypt.checkpw(
-                    senha.encode("utf-8"), usuarios[id]["senha"].encode("utf-8")
+                    senha.encode("utf-8"), usuario["senha"].encode("utf-8")
                 ):
                     novaSenha = getpass("Digite a nova senha.: ")
-                    usuarios[id]["senha"] = bcrypt.hashpw(
+                    usuario["senha"] = bcrypt.hashpw(
                         novaSenha.encode("utf8"), bcrypt.gensalt()
                     ).decode("utf-8")
                     limpar()
@@ -366,14 +367,18 @@ def meusLivros(id, waitInp=True):
     # como printar apenas as informações necessárias para o usuario?
     print("===== Meus Livros =====")
     # sem dar update
-    emprestimos = list(filter(lambda i: i["usuario"] == id, emprestimos))
+    emprestimos = list(filter(lambda i: i["usuario"] == usuario["id"], emprestimos))
     emprestimos = list(filter(lambda i: i["devolucao"] == "", emprestimos))
 
+    #adcionar next()
     for emprestimo in emprestimos:
-        livroPorId = list(filter(lambda i: i["id"] == emprestimo["livro"], livros))
-        if len(livroPorId) > 0:
-            emprestimo["livro"] = livroPorId[0]["titulo"]
-
+        livroPorId = next(filter(lambda i: i["id"] == emprestimo["livro"], livros),None)
+        if livroPorId != None:
+            emprestimo["livro"] = livroPorId["titulo"]
+        
+        del emprestimo["id"]
+        del emprestimo["usuario"]
+        
     print(tabulate(emprestimos, headers="keys"))
 
     if waitInp:
@@ -443,7 +448,7 @@ def devolverLivro(id):
     
     while True:
         print("===== Devolução de livros =====")
-        emprestimos = list(filter(lambda i: i["usuario"] == id, emprestimos))
+        emprestimos = list(filter(lambda i: i["usuario"] == usuario["id"], emprestimos))
         flag = False
         meusLivros(id, False)
         emprestimoId = input("\nInsira o ID do livro ou Tecle Enter para sair.: ")
@@ -667,11 +672,11 @@ def login():
     limpar()
     while True:
         print("---LOGIN---")
-        usuario = input("Insira seu email: ")
+        email = input("Insira seu email: ")
         senha = getpass("Insira sua senha: ")
 
         for i in range(len(usuarios)):
-            if usuario == usuarios[i]["email"] and bcrypt.checkpw(
+            if email == usuarios[i]["email"] and bcrypt.checkpw(
                 senha.encode("utf-8"), usuarios[i]["senha"].encode("utf-8")
             ):
                 limpar()
