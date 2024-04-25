@@ -239,9 +239,9 @@ def editarLivro():
         livroId = input(
             "Digite o id do livro a ser alterado ou pressione enter para sair.: "
         )
-
+        limpar()
+        
         if livroId == "":
-            limpar()
             break
         
 
@@ -379,7 +379,7 @@ def meusLivros(id, waitInp=True):
         del emprestimo["id"]
         del emprestimo["usuario"]
         
-    print(tabulate(emprestimos, headers="keys"))
+    print(tabulate(emprestimos, headers="keys", showindex=True))
 
     if waitInp:
         input("\nTecle Enter para sair.: ")
@@ -419,7 +419,7 @@ def solicitarLivro(id):
                 emprestimo = {
                     "id": emprestimoId,
                     "livro": int(livroId),
-                    "usuario": id,
+                    "usuario": usuario["id"],
                     "data_emprestimo": hoje.strftime("%d/%m/%Y"),
                     "prazo": (hoje + datetime.timedelta(days=7)).strftime("%d/%m/%Y"),
                     "devolucao": "",
@@ -449,25 +449,23 @@ def devolverLivro(id):
     while True:
         print("===== Devolução de livros =====")
         emprestimos = list(filter(lambda i: i["usuario"] == usuario["id"], emprestimos))
+        emprestimos = list(filter(lambda i: i["devolucao"] == "", emprestimos))
         flag = False
         meusLivros(id, False)
-        emprestimoId = input("\nInsira o ID do livro ou Tecle Enter para sair.: ")
+        emprestimoId = input("\nInsira o ID do emprestimo ou Tecle Enter para sair.: ")
         limpar()
 
         if emprestimoId == "":
             break
 
-        for i in range(len(emprestimos)):
-            if str(emprestimos[i]["id"]) == emprestimoId:
-                flag = True
-                break
+        emprestimoId = int(emprestimoId)
 
-        if flag:
-            for j in range(len(livros)):
-                if livros[j]["id"] == emprestimos[i]["livro"]:
-                    livros[j]["estoque"] += 1
+        if emprestimoId >= 0 and emprestimoId < len(emprestimos):
+            for livro in livros:
+                if livro["id"] == emprestimos[emprestimoId]["livro"]:
+                    livro["estoque"] += 1
 
-            emprestimos[i]["devolucao"] = datetime.date.today().strftime("%d/%m/%Y")
+            emprestimos[emprestimoId]["devolucao"] = datetime.date.today().strftime("%d/%m/%Y")
         else:
             limpar()
             print("ID inválido, tente novamente")
@@ -527,7 +525,6 @@ def paraDevolucao():
     limpar()
 
 
-# -----------BIBLIOTECA-----------
 # -----------ADMIN-----------
 def gerenciarUsuarios():
     opcoes = {

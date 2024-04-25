@@ -311,10 +311,18 @@
         {
             "id": 3,
             "livro": 15,
-            "usuario": 14,
+            "usuario": 13,
             "data_emprestimo": "10/04/2024",
             "prazo": "17/04/2024",
             "devolucao": "15/04/2024"
+        },
+        {
+            "id": 4,
+            "livro": 15,
+            "usuario": 13,
+            "data_emprestimo": "17/04/2024",
+            "prazo": "24/04/2024",
+            "devolucao": ""
         }
     ]
 }
